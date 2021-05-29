@@ -5,7 +5,7 @@ const app = express();
 app.use(express.static(__dirname));
 
 app.get("/", function(req, res){
-    res.sendFile('index.html', {root: __dirname});
+    res.sendFile('/Frontend/HTML/homepage.html', {root: __dirname});
     //res.send("Welcome to My Basic Site");  
 })
 const PORT = 5000;
