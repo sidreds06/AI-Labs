@@ -16,7 +16,7 @@ app.listen(PORT, function(){
 })
 
 
-app.get("/", function(req, res){
+app.get("/home", function(req, res){
     res.sendFile('/Frontend/HTML/homepage.html', {root: __dirname});
     //res.send("Welcome to My Basic Site");  
 })
