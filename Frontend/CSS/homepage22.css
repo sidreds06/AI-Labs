@@ -1,0 +1,229 @@
+* {
+    box-sizing: border-box;
+}
+
+body { 
+    margin: 0;
+    font-family: Segoe UI,SegoeUI,"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+/* Header */
+header {
+    background-color:black;
+    padding: 10px 200px;
+}
+
+header a {
+    /* float: left; */
+    color: white;
+    text-align: center;
+    padding: 17px;
+    text-decoration: none;
+    font-size: 17px; 
+    line-height: 10px;
+    border-radius: 10px;
+}
+
+#bpt a:hover {
+    font-weight: bold;
+}
+
+#lr a:hover{
+    background-color:purple;
+}
+
+.active {
+    background-color:dodgerblue;
+    padding: 13px;
+    margin: 5px;
+    top: 10px;
+    border-radius: 17px;
+    font-size: 17px;
+    position: relative;
+}
+
+#bpt{
+    top: 10px;
+    position: relative;
+}
+
+#lr {
+    float: right;
+    left: 50px;
+    position: relative;
+}
+
+.header-right {
+    padding: 10px;
+    color:white;
+    float: right;
+    top: 10px;
+}
+
+/* Body */
+.image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.onImage {
+    color: white;
+    position: absolute;
+    text-align: left;
+    top: 40%;
+    left: 24%;
+    transform: translate(-50%, -50%);
+}
+
+p{
+    font-size: large;
+    font-family: Segoe UI, SegoeUI,"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.projects ,.blogs {
+    font-family: Segoe UI,SegoeUI,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    padding-top: 50px;
+}
+.heading {
+    text-align: center;
+}
+
+.caption {
+    font-size: x-large;
+    text-align: center;
+}
+
+.link {
+    margin-left: 45%;
+    text-align: center;
+    font-size: xx-large;
+}
+.link p {
+    text-align: center;
+    font-size: x-large;
+}
+
+#box {
+    text-align: center;
+    position: relative;
+}
+
+.cb {
+    height: 450px;
+    width: 400px;
+    margin: 40px;
+    display: inline-block;
+    vertical-align: middle;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    text-align: left;
+}
+
+.pic {
+    width: 100%;
+}
+
+.text {
+    margin: 10px;
+    text-align: left;
+}
+
+.author {
+    line-height: 10px;
+    bottom: 40px;
+    margin: 10px;
+    position: absolute;
+}
+
+.vm {
+    margin: 10px;
+    font-size: 17px;
+    bottom: 10px;
+    position: relative;
+    text-align: right;
+    left: 285px;
+}
+
+/*=======================================================
+			FOOTER
+========================================================*/
+#footer {
+    background-color: #222;
+    color: #d3d3d3;
+    font-size: 12px;
+}
+#footer li {
+    line-height: 28px;
+}
+#footer li {
+    list-style: none;
+}
+#footer a {
+    color: #d3d3d3;
+    font-weight: 500;
+}
+#footer a:hover {
+    color: #f6b138;
+}
+#footer p {
+    line-height: 24px;
+}
+#footer .footer-top {
+    padding-top: 100px;
+}
+#footer .footer-top .columns {
+    border-left: 1px solid #2e2e2e;
+}
+#footer .footer-top .columns:first-child {
+    border: none;
+}
+#footer .footer-bottom {
+    margin-top: 40px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 20px;
+}
+#footer p {
+    color: #d3d3d3;
+}
+#footer .block {
+    margin-bottom: 20px;
+}
+#footer .block-about {
+    padding-right: 80px;
+}
+.block-companies {
+    padding-right: 50px;
+}
+#footer .block-links li {
+    float: left;
+    width: 50%;
+}
+#footer .block .block-title {
+    color: #ffffff;
+    font-size: 16px;
+    letter-spacing: 0.3px;
+    margin-top: 0;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    position: relative;
+    font-weight: 500;
+}
+#footer .block-content img {
+    margin-top: 20px;
+}
+#footer .block .block-title:not(.no-underline):before {
+    background: #f6b138;
+    bottom: 0;
+    content: "";
+    height: 2px;
+    position: absolute;
+    width: 50px;
+}
+#footer .copyright {
+    text-transform: uppercase;
+}
+#footer .copyright p {
+    font-size: 11px;
+    margin-bottom: 0px;
+}
