@@ -1,5 +1,5 @@
 {
-  "name": "AI-Labs",
+  "name": "ai-labs",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -15,7 +15,6 @@
     "type": "git",
     "url": "git+https://github.com/sidreds06/AI-Labs.git"
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
