@@ -1,0 +1,1 @@
+// <!-- <img class="card-img-top" src=<%= `${data[i].img}` %> alt="Card image cap" height="250"> -->

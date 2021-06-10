@@ -36,6 +36,26 @@ app.get("/projects", function(req, res){
     res.render('projects')
 })
 
+app.get("/blog", (req, res)=>{
+    res.render('index');
+})
+
+app.get("/addPost", (req, res) => {
+    res.render('addPost');
+})
+
+app.get('/myPost', (req, res) => {
+    // res.render('myPost');
+    DB.query('SELECT * FROM posts', (err, data) => {
+        if(err){
+            console.log(err);
+        }
+        else{
+            res.render('myPost', {data});
+        }
+    })
+})
+
 app.get("/my-projects", function(req, res){
     DB.query(`SELECT * FROM list`, (err,data) =>{
         if(err){
@@ -50,6 +70,32 @@ app.get("/my-projects", function(req, res){
 
 app.get("/add-projects", function(req, res){
     res.render('addprojects')
+})
+
+app.post("/create-post", (req, res) => {
+    if(req.files){
+        var file = req.files.image;
+        var filename = file.name;
+        var path = __dirname + '/IMG/Uploaded_img/' + filename;
+        file.mv(path, function(){});
+    }
+    var d = req.body;
+    var img = '/IMG/Uploaded_img/'+filename;
+    var query = `INSERT INTO posts (title, description, body, image, user_id, status) VALUES (${SqlString.escape(d.title)}, ${SqlString.escape(d.description)}, ${SqlString.escape(d.body)}, '${img}', '98765', '1')`;
+    DB.query(query, (err, result) => {
+        if(err) throw err;
+        else{
+            DB.query(`SELECT * FROM posts`, (err,data) =>{
+                if(err){
+                    console.log(err)
+                }
+                else{
+                res.render('myPost',{data})
+                 }
+              
+            })
+        }
+    })
 })
 
 app.post("/create", function(req, res){
@@ -94,6 +140,26 @@ router.get("/info", function(req, res){
    
 })
 
+app.get('/deletePost/:id', (req, res) => {
+    var id = req.params.id;
+    DB.query(`DELETE FROM posts WHERE id = '${id}'`, (err, result) => {
+        if(err){
+            console.log(err);
+        }
+        else{
+            DB.query(`SELECT * FROM posts`, (err,data) =>{
+                if(err){
+                    console.log(err)
+                }
+                else{
+                res.render('myPost',{data})
+                 }
+              
+            })
+        }
+    })
+})
+
 app.get("/delete/:id", function(req, res){
     var id= req.params.id
     DB.query(`DELETE FROM list WHERE id = "${id}"`,(err,result)=>{
@@ -115,6 +181,19 @@ app.get("/delete/:id", function(req, res){
     })
 })
 
+// app.get("/editPost/:id", (res, req)=>{
+//     var id = req.params.id;
+//     // console.log(id);
+//     DB.query(`SELECT * FROM posts WHERE id = "${id}" `, (err, data) => {
+//         if(err){
+//             console.log(err);
+//         }
+//         else{
+//             res.render('editPost', {data});
+//         }
+//     })
+// })
+
 app.get("/edit/:id", function(req, res){
 
     var id=req.params.id
@@ -124,6 +203,19 @@ app.get("/edit/:id", function(req, res){
         }
         else{
         res.render('editproject',{data})
+         }
+    })
+})
+
+app.get("/editPost/:id", function(req, res){
+
+    var id=req.params.id
+    DB.query(`SELECT * FROM posts WHERE id = "${id}" `, (err,data) =>{
+        if(err){
+            console.log(err)
+        }
+        else{
+        res.render('editPost',{data})
          }
     })
 })
@@ -153,7 +245,19 @@ app.post("/update/:id", function(req, res){
     })
 
 
-})    
+}) 
+
+app.get('/viewPost/:id', (req, res) => {
+    var id = req.params.id;
+    DB.query(`SELECT * FROM posts WHERE id = "${id}" `, (err, data) => {
+        if(err){
+            console.log(err);
+        }
+        else{
+            res.render('viewPost', {data});
+        }
+    })
+})
 
 app.get("/view/:id", function(req, res){
 
@@ -168,5 +272,13 @@ app.get("/view/:id", function(req, res){
     })
 
 })
+
+app.get('/login', (req, res) => {
+    res.render('login');
+});
+
+app.get('/register', (req, res) => {
+    res.render('register');
+});
 
 module.exports = router
