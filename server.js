@@ -2,7 +2,7 @@ const express = require('express');
 const DB = require('../AI-Labs/database/connection')
 var router = express.Router()
 const upload = require('express-fileupload');
-const { render } = require('ejs');
+const { render, name } = require('ejs');
 const session = require('express-session')
 var bodyParser = require('body-parser')
 var MySQLStore = require('express-mysql-session')(session);
@@ -19,6 +19,9 @@ var options = {
 
 var sessionStore = new MySQLStore(options);
 
+var uname = 'User'
+var urole = 0
+var usr = []
 var SqlString = require('sqlstring');
 
 app.use(upload())
@@ -52,6 +55,20 @@ var isAuth=(req,res,next)=>{
      res.redirect('login')  
 }
 
+var isAdmin=(req,res,next)=>{
+    if(req.session.role)
+      next()
+    else
+      res.redirect('info')  
+ }
+
+ var isLogin=(req,res,next)=>{
+    if(!req.session.role)
+      next()
+    else
+      res.redirect('info')  
+ }
+
 app.use('/', router)
 
 
@@ -63,52 +80,58 @@ app.listen(PORT, function(){
 })
 
 
-app.get("/home", function(req, res){
-    res.render('homepage')
-})
-
 app.get("/projects",isAuth, function(req, res){
-    console.log(req.session.userId)
-    res.render('projects')
+    DB.query(`SELECT * FROM list`, (err,data) =>{
+        if(err){
+            console.log(err)
+        }
+        else{ 
+        res.render('projects',{data,uname,usr})    
+         }
+
+    })
+
 })
 
-app.get("/blog", (req, res)=>{
-    res.render('index');
+app.get("/blog",isAuth, (req, res)=>{
+    res.render('index',{uname});
 })
 
-app.get("/addPost", (req, res) => {
-    res.render('addPost');
+app.get("/addPost",isAuth, (req, res) => {
+    res.render('addPost',{uname});
 })
 
-app.get('/myPost', (req, res) => {
+app.get('/myPost',isAuth, (req, res) => {
     // res.render('myPost');
     DB.query('SELECT * FROM posts', (err, data) => {
         if(err){
             console.log(err);
         }
         else{
-            res.render('myPost', {data});
+            res.render('myPost', {data,uname});
         }
     })
 })
 
-app.get("/my-projects", function(req, res){
+app.get("/my-projects",isAuth, function(req, res){
     DB.query(`SELECT * FROM list`, (err,data) =>{
         if(err){
             console.log(err)
         }
         else{
-        res.render('myprojects',{data})
+        console.log(name)    
+        var id = req.session.userId    
+        res.render('myprojects',{data,id,uname})
          }
 
     })
 })
 
-app.get("/add-projects", function(req, res){
-    res.render('addprojects')
+app.get("/add-projects",isAuth, function(req, res){
+    res.render('addprojects',{uname})
 })
 
-app.post("/create-post", (req, res) => {
+app.post("/create-post",isAuth, (req, res) => {
     if(req.files){
         var file = req.files.image;
         var filename = file.name;
@@ -117,7 +140,7 @@ app.post("/create-post", (req, res) => {
     }
     var d = req.body;
     var img = '/IMG/Uploaded_img/'+filename;
-    var query = `INSERT INTO posts (title, description, body, image, user_id, status) VALUES (${SqlString.escape(d.title)}, ${SqlString.escape(d.description)}, ${SqlString.escape(d.body)}, '${img}', '98765', '1')`;
+    var query = `INSERT INTO posts (title, description, body, image, user_id, status) VALUES (${SqlString.escape(d.title)}, ${SqlString.escape(d.description)}, ${SqlString.escape(d.body)}, '${img}', '${req.session.userId}', '0')`;
     DB.query(query, (err, result) => {
         if(err) throw err;
         else{
@@ -126,7 +149,7 @@ app.post("/create-post", (req, res) => {
                     console.log(err)
                 }
                 else{
-                res.render('myPost',{data})
+                res.render('myPost',{data,uname})
                  }
               
             })
@@ -134,7 +157,7 @@ app.post("/create-post", (req, res) => {
     })
 })
 
-app.post("/create", function(req, res){
+app.post("/create",isAuth, function(req, res){
 
     if(req.files){
         var file =req.files.image
@@ -145,7 +168,7 @@ app.post("/create", function(req, res){
     var d=req.body
     var img = '/IMG/Uploaded_img/'+filename
     console.log(d)
-    var sql = `INSERT INTO list (title, description, body, img, user_id, status) VALUES (${SqlString.escape(d.title)}, ${SqlString.escape(d.description)}, ${SqlString.escape(d.body)}, '${img}', '98765', '1')`;
+    var sql = `INSERT INTO list (title, description, body, img, user_id, status) VALUES (${SqlString.escape(d.title)}, ${SqlString.escape(d.description)}, ${SqlString.escape(d.body)}, '${img}', '${req.session.userId}', '0')`;
     DB.query(sql, function (err, result) {
       if (err) throw err;
       else{
@@ -153,8 +176,8 @@ app.post("/create", function(req, res){
             if(err){
                 console.log(err)
             }
-            else{
-            res.render('myprojects',{data})
+            else{    
+            res.render('myprojects',{data,uname})
              }
 
         })
@@ -162,23 +185,22 @@ app.post("/create", function(req, res){
     });
   });
 
-
-app.get("/info",isAuth, function(req, res){
-    req.session.userId = 1
-    console.log(req.session)
+app.get("/info", function(req, res){
     DB.query(`SELECT * FROM list`, (err,data) =>{
         if(err){
             console.log(err)
         }
         else{
-        res.render('homepage',{data})
+        var ses = req.session.userId
+        res.render('homepage',{data,ses,uname,urole})
          }
 
     })
 
 })
 
-app.get('/deletePost/:id', (req, res) => {
+
+app.get('/deletePost/:id',isAuth, (req, res) => {
     var id = req.params.id;
     DB.query(`DELETE FROM posts WHERE id = '${id}'`, (err, result) => {
         if(err){
@@ -190,7 +212,7 @@ app.get('/deletePost/:id', (req, res) => {
                     console.log(err)
                 }
                 else{
-                res.render('myPost',{data})
+                res.render('myPost',{data,uname})
                  }
               
             })
@@ -198,7 +220,7 @@ app.get('/deletePost/:id', (req, res) => {
     })
 })
 
-app.get("/delete/:id", function(req, res){
+app.get("/delete/:id",isAuth, function(req, res){
     var id= req.params.id
     DB.query(`DELETE FROM list WHERE id = "${id}"`,(err,result)=>{
         if(err){
@@ -210,7 +232,7 @@ app.get("/delete/:id", function(req, res){
                     console.log(err)
                 }
                 else{
-                res.render('myprojects',{data})
+                res.render('myprojects',{data,uname})
                  }
 
             })
@@ -219,20 +241,7 @@ app.get("/delete/:id", function(req, res){
     })
 })
 
-// app.get("/editPost/:id", (res, req)=>{
-//     var id = req.params.id;
-//     // console.log(id);
-//     DB.query(`SELECT * FROM posts WHERE id = "${id}" `, (err, data) => {
-//         if(err){
-//             console.log(err);
-//         }
-//         else{
-//             res.render('editPost', {data});
-//         }
-//     })
-// })
-
-app.get("/edit/:id", function(req, res){
+app.get("/edit/:id",isAuth, function(req, res){
 
     var id=req.params.id
     DB.query(`SELECT * FROM list WHERE id = "${id}" `, (err,data) =>{
@@ -240,12 +249,12 @@ app.get("/edit/:id", function(req, res){
             console.log(err)
         }
         else{
-        res.render('editproject',{data})
+        res.render('editproject',{data,uname})
          }
     })
 })
 
-app.get("/editPost/:id", function(req, res){
+app.get("/editPost/:id",isAuth, function(req, res){
 
     var id=req.params.id
     DB.query(`SELECT * FROM posts WHERE id = "${id}" `, (err,data) =>{
@@ -253,12 +262,12 @@ app.get("/editPost/:id", function(req, res){
             console.log(err)
         }
         else{
-        res.render('editPost',{data})
+        res.render('editPost',{data,uname})
          }
     })
 })
 
-app.post("/update/:id", function(req, res){
+app.post("/update/:id",isAuth, function(req, res){
     var id=req.params.id
     var d = req.body
 
@@ -274,7 +283,7 @@ app.post("/update/:id", function(req, res){
                     console.log(err)
                 }
                 else{
-                res.render('myprojects',{data})
+                res.render('myprojects',{data,uname})
                  }
 
             })
@@ -283,24 +292,21 @@ app.post("/update/:id", function(req, res){
     })
 
 
-<<<<<<< HEAD
 }) 
 
-app.get('/viewPost/:id', (req, res) => {
+app.get('/viewPost/:id',isAuth, (req, res) => {
     var id = req.params.id;
     DB.query(`SELECT * FROM posts WHERE id = "${id}" `, (err, data) => {
         if(err){
             console.log(err);
         }
         else{
-            res.render('viewPost', {data});
+            res.render('viewPost', {data,uname});
         }
     })
-=======
->>>>>>> 095955661ecb96ae1091e77d1cf2069af97409b0
 })
 
-app.get("/view/:id", function(req, res){
+app.get("/view/:id",isAuth, function(req, res){
 
     var id = req.params.id
     DB.query(`SELECT * FROM list WHERE id = "${id}" `, (err,data) =>{
@@ -308,26 +314,18 @@ app.get("/view/:id", function(req, res){
             console.log(err)
         }
         else{
-        res.render('view',{data})
+        res.render('view',{data,uname})
          }
     })
 
 })
 
-<<<<<<< HEAD
-app.get('/login', (req, res) => {
-    res.render('login');
-});
 
-app.get('/register', (req, res) => {
+app.get('/register',isLogin, (req, res) => {
     res.render('register');
 });
-=======
-app.get("/register", function(req, res){
-    res.render('register')
-})
 
-app.get("/login", function(req, res){
+app.get("/login",isLogin, function(req, res){
     res.render('login')
 })
 
@@ -347,11 +345,15 @@ app.post("/register", function(req, res){
 
   app.post("/login", function(req, res){
       const user = req.body
-    DB.query(`SELECT * FROM user WHERE email = "${user.uname}" AND password = "${user.psd}"`, (err,data) =>{
+    DB.query(`SELECT * FROM user WHERE email = "${user.email}" AND password = "${user.password}"`, (err,data) =>{
              if(data.length > 0){
-            req.session.userId = data[0].id    
-            //res.redirect('projects')
-            res.json(req.session.userId)
+            req.session.userId = data[0].id   
+            req.session.username = data[0].username
+            uname = data[0].username
+            urole = data[0].admin
+            usr = data[0]
+            req.session.role = data[0].admin 
+            res.redirect('info')
         }
         else{
             res.redirect('login')
@@ -359,14 +361,18 @@ app.post("/register", function(req, res){
     })
 })
 
+app.get('/dashboard',isAuth,isAdmin,function(req, res){
+    res.render('dashboard',{uname})
+})
+
 app.get('/logout', function(req, res){
     req.session.destroy((err)=>{
         if(err) throw err;
-        res.redirect('login')
+        res.redirect('info')
     
     })
 })  
 
->>>>>>> 095955661ecb96ae1091e77d1cf2069af97409b0
+
 
 module.exports = router

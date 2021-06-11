@@ -17,14 +17,22 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <a href="https://www.theblackbucks.com/" class="navbar-brand">Blackbuck</a>
-            <div class="collapse navbar-collapse " id="mainNav" ">
-                <div class="navbar-nav">
+            <div class="collapse navbar-collapse " id="mainNav">
+                <div class="navbar-nav ml-auto">
                     <a class="nav-item nav-link " href="index.html">Home</a>
                     <a class="nav-item nav-link" href="index.html">About</a>
                     <a class="nav-item nav-link" href="index.html">Training</a>
-                    <a class="nav-item nav-link" href="addPost.html">Add-Posts</a>
-                    <a class="nav-item nav-link" href="myPost.html">My-Posts</a>
-                    
+                    <a class="nav-item nav-link" href="/addPost">Add-Posts</a>
+                    <a class="nav-item nav-link" href="/myPost">My-Posts</a>
+                    <div class="dropdown align-items-right">
+                      <button class="btn btn-primary dropdown-toggle text-right mx-3 rounded-pill" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <%=uname%>
+                      </button>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#">Profile</a>
+                        <a class="dropdown-item" href="/logout">Logout</a>
+                      </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -137,8 +145,8 @@
                   <div class="block-content">
                     
                       <li><a href="blog.html">AI Blogs</a></li>
-                      <li><a href="#."><img src="images/android-btn.png" style="width:40%"></a></li>
-                      <li><a href="#."><img src="images/app-btn.png" style="width:40%"></a></li> 
+                      <li><a href="#."><img src="../blogs/images/android-btn.png" style="width:40%"></a></li>
+                      <li><a href="#."><img src="../blogs/images/app-btn.png" style="width:40%"></a></li> 
                     
                   </div>
                 </div>

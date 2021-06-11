@@ -23,8 +23,14 @@
           <li class="nav-item">
             <a class="nav-link" href="/add-projects">Add Projects</a>
           </li>
-          <li class="nav-pills">
-            <a class="nav-link active mx-3 px-4 rounded-pill" href="#">User</a>
+          <li class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle text-right mx-3 rounded-pill" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <%=uname%>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="#">Profile</a>
+              <a class="dropdown-item" href="/logout">Logout</a>
+            </div>
           </li>
         </ul>
     </div>
@@ -41,9 +47,11 @@
             </tr>
             </thead>
             <tbody>
-          <%for(var i=0; i<data.length; ++i) { %>
+          <%for(var i=0,j=0; i<data.length; ++i) { %>
+            <%if(id === data[i].user_id) { %>
+              <%j++%>
             <tr>
-                <td><%=i+1%></td>
+                <td><%=j%></td>
                 <td><%=data[i].title%></td>
                 <td>
                   <form class="d-inline" action="/view/<%= data[i].id %>" method="get">
@@ -60,6 +68,7 @@
                     <button type="button" class="btn btn-danger">Delete</button> -->
                 </td>
             </tr>
+            <%}%>
           <%}%>
             </tbody>
         </table>
@@ -124,8 +133,8 @@
                   <div class="block-content">
                     
                       <li><a href="blog.html">AI Blogs</a></li>
-                      <li><a href="#."><img src="images/playstore.png" style="width:40%"></a></li>
-                      <li><a href="#."><img src="images/appstore.png" style="width:40%"></a></li> 
+                      <li><a href="#."><img src="../blogs/images/android-btn.png" style="width:40%"></a></li>
+                      <li><a href="#."><img src="../blogs/images/app-btn.png" style="width:40%"></a></li> 
                     
                   </div>
                 </div>
