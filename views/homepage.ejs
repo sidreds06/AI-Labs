@@ -13,7 +13,7 @@
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
         <!-- Brand/logo -->
         <div class="container">
-        <a class="navbar-brand " href="#"><strong> BB </strong></a>
+        <a class="navbar-brand " href="#"><strong> Blackbuck </strong></a>
         <!-- Links -->
         <ul class="navbar-nav">
           <li class="nav-item">
@@ -62,25 +62,55 @@
         <p class="caption h4">Explore our most popular projects.</p>      
       </div>
       <div class="card-deck m-5 mx-auto" style="width:90%">
-        <%for(var i=0; i<4; ++i) { %>
+        <%for(var i=0,j=0; i<a1.length && j<4 ; ++i) { %>
+          <% if(a1[i].status) { %>
+            <%j++%>
         <div class="card" >
-          <img class="card-img-top" src=<%= `${data[i].img}` %> alt="Card image cap" height="250">
+          <img class="card-img-top" src=<%= `${a1[i].img}` %> alt="Card image cap" height="250">
           <div class="card-body">
-            <h5 class="card-title"><%=data[i].title%></h5>
-            <p class="card-text"><%=data[i].description%></p>
+            <h5 class="card-title"><%=a1[i].title%></h5>
+            <p class="card-text"><%=a1[i].description%></p>
           </div>
           <div class="card-footer bg-white p-0 pl-2">
-            <p class="card-text m-0"><small>User1</small></p>
-            <p class="card-text m-0"><small class="text-muted">College Name</small></p>
-            <a href="../HTML/Project-main.html" class="card-text m-0 p-0 "><p class="text-right m-0 p-0 pr-1"><small>View more</small></p></a>
+            <p class="card-text m-0"><small><%=a1[i].username%></small></p>
+            <p class="card-text m-0"><small class="text-muted"><%=a1[i].college%></small></p>
+            <a href="/view/<%= a1[i].id %>" class="card-text m-0 p-0 "><p class="text-right m-0 p-0 pr-1"><small>View more</small></p></a>
         </div>
         </div>
         <%}%>
+        <%}%>
+        </div>     
+      <div class="container text-center">
+        <a class="link m-5" href="/blogs/index.html"><h3>Browse all Projects</h3></a>  
+      </div>  
+
+        <div class="jumbotron bg-white text-center m-2">
+          <h1 class="heading m-4 font-weight-bold">Popular Blogs</h1>
+          <p class="caption h4">Explore our most popular blogs.</p>    
         </div>
+        <div class="card-deck m-5 mx-auto" style="width:90%">
+          <%for(var i=0,j=0; i<a2.length && j<4 ; ++i) { %>
+            <% if(a2[i].status) { %>
+              <%j++%>
+          <div class="card" >
+            <img class="card-img-top" src=<%= `${a2[i].image}` %> alt="Card image cap" height="250">
+            <div class="card-body">
+              <h5 class="card-title"><%=a2[i].title%></h5>
+              <p class="card-text"><%=a2[i].description%></p>
+            </div>
+            <div class="card-footer bg-white p-0 pl-2">
+              <p class="card-text m-0"><small><%=a2[i].username%></small></p>
+              <p class="card-text m-0"><small class="text-muted"><%=a2[i].college%></small></p>
+              <a href="/view/<%= a2[i].id %>" class="card-text m-0 p-0 "><p class="text-right m-0 p-0 pr-1"><small>View more</small></p></a>
+          </div>
+          </div>
+          <%}%>
+          <%}%>
+        </div>  
+        <div class="container text-center">
+          <a class="link m-5" href="/blogs/index.html"><h3>Browse all blogs</h3></a>  
+        </div>   
        
 
-      <div class="container text-center">
-        <a class="link m-5" href="/blogs/index.html"><h3>Browse all blogs</h3></a>  
-      </div>  
       
 <%- include('footer'); -%>

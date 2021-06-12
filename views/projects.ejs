@@ -51,7 +51,9 @@
         <h1>Explore Projects</h1>
       </div>
       <div class="card-deck m-5 mx-auto" style="width:90%">
-        <%for(var i=0; i<4; ++i) { %>
+        <%for(var i=0,j=0; i<data.length && j<4; ++i) { %>
+          <% if(data[i].status) { %>
+            <%j++%>
         <div class="card" >
           <img class="card-img-top" src=<%= `${data[i].img}` %> alt="Card image cap" height="250">
           <div class="card-body">
@@ -59,11 +61,12 @@
             <p class="card-text"><%=data[i].description%></p>
           </div>
           <div class="card-footer bg-white p-0 pl-2">
-            <p class="card-text m-0"><small>User1</small></p>
-            <p class="card-text m-0"><small class="text-muted">College Name</small></p>
-            <a href="../HTML/Project-main.html" class="card-text m-0 p-0 "><p class="text-right m-0 p-0 pr-1"><small>View more</small></p></a>
+            <p class="card-text m-0"><small><%=data[i].username%></small></p>
+            <p class="card-text m-0"><small class="text-muted"><%=data[i].college%></small></p>
+            <a href="/view/<%= data[i].id %>" class="card-text m-0 p-0 "><p class="text-right m-0 p-0 pr-1"><small>View more</small></p></a>
         </div>
         </div>
-        <%}%>
+        <% } %>
+        <% } %>
         </div>
       <%- include('footer'); %>

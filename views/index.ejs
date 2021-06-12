@@ -51,84 +51,27 @@
         <!-- cards -->
 
         <div class="row">
+          <%for(var i=0; i<4; ++i) { %>
+            <% if(data[i].status) { %>
             <div class="col-md-6 col-lg-3">
                 <div class="card">
-                    <img class="card-img-top img-fluid" src="../blogs/images/1574521343_image_3.png">
+                    <img class="card-img-top" src=<%= `${data[i].image}` %> alt="Card image cap" height="250">
                     <div class="card-block">
-                        <h3 class="card-title">Project-title</h3>
-                        <p class="card-text">Lorem ninja ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+                        <h3 class="card-title"><%=data[i].title%></h3>
+                        <p class="card-text"><%=data[i].description%></p>
                     </div>
+                    <div class="card-footer bg-white p-0 pl-2">
+                      <p class="card-text m-0"><small><%=data[i].username%></small></p>
+                      <p class="card-text m-0"><small class="text-muted"><%=data[i].college%></small></p>
+                      <a href="/viewPost/<%= data[i].id %>" class="card-text m-0 p-0 "><p class="text-right m-0 p-0 pr-1"><small>View more</small></p></a>
+                  </div>
                 </div>
+              </div>
+                <%}%>
+                <%}%>
             </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="card">
-                    <img class="card-img-top img-fluid" src="../blogs/images/1574521343_image_3.png">
-                    <div class="card-block">
-                        <h3 class="card-title">Project-title</h3>
-                        <p class="card-text">Lorem ninja ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="card">
-                    <img class="card-img-top img-fluid" src="../blogs/images/1574521343_image_3.png">
-                    <div class="card-block">
-                        <h3 class="card-title">Project-title</h3>
-                        <p class="card-text">Lorem ninja ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="card">
-                    <img class="card-img-top img-fluid" src="../blogs/images/1574521343_image_3.png">
-                    <div class="card-block">
-                        <h3 class="card-title">Project-title</h3>
-                        <p class="card-text">Lorem ninja ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+            
         
-        <div class="row my-5">
-            <div class="col-md-6 col-lg-3">
-                <div class="card">
-                    <img class="card-img-top img-fluid" src="../blogs/images/1574521343_image_3.png">
-                    <div class="card-block">
-                        <h3 class="card-title">Project-title</h3>
-                        <p class="card-text">Lorem ninja ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="card">
-                    <img class="card-img-top img-fluid" src="../blogs/images/1574521343_image_3.png">
-                    <div class="card-block">
-                        <h3 class="card-title">Project-title</h3>
-                        <p class="card-text">Lorem ninja ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="card">
-                    <img class="card-img-top img-fluid" src="../blogs/images/1574521343_image_3.png">
-                    <div class="card-block">
-                        <h3 class="card-title">Project-title</h3>
-                        <p class="card-text">Lorem ninja ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="card">
-                    <img class="card-img-top img-fluid" src="../blogs/images/1574521343_image_3.png">
-                    <div class="card-block">
-                        <h3 class="card-title">Project-title</h3>
-                        <p class="card-text">Lorem ninja ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div><!-- end .container -->
     
 <!-- Footer -->

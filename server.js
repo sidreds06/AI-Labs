@@ -52,14 +52,14 @@ var isAuth=(req,res,next)=>{
    if(req.session.userId)
      next()
    else
-     res.redirect('login')  
+     res.redirect('/login')  
 }
 
 var isAdmin=(req,res,next)=>{
     if(req.session.role)
       next()
     else
-      res.redirect('info')  
+      res.redirect('/info')  
  }
 
  var isLogin=(req,res,next)=>{
@@ -94,7 +94,15 @@ app.get("/projects",isAuth, function(req, res){
 })
 
 app.get("/blog",isAuth, (req, res)=>{
-    res.render('index',{uname});
+    DB.query(`SELECT * FROM posts`, (err,data) =>{
+        if(err){
+            console.log(err)
+        }
+        else{ 
+        res.render('index',{data,uname,usr})    
+         }
+
+    })
 })
 
 app.get("/addPost",isAuth, (req, res) => {
@@ -140,7 +148,7 @@ app.post("/create-post",isAuth, (req, res) => {
     }
     var d = req.body;
     var img = '/IMG/Uploaded_img/'+filename;
-    var query = `INSERT INTO posts (title, description, body, image, user_id, status) VALUES (${SqlString.escape(d.title)}, ${SqlString.escape(d.description)}, ${SqlString.escape(d.body)}, '${img}', '${req.session.userId}', '0')`;
+    var query = `INSERT INTO posts (title, description, body, image, user_id, username, college, status) VALUES (${SqlString.escape(d.title)}, ${SqlString.escape(d.description)}, ${SqlString.escape(d.body)}, '${img}', '${req.session.userId}', '${usr.username}', '${usr.college}', '0')`;
     DB.query(query, (err, result) => {
         if(err) throw err;
         else{
@@ -168,7 +176,7 @@ app.post("/create",isAuth, function(req, res){
     var d=req.body
     var img = '/IMG/Uploaded_img/'+filename
     console.log(d)
-    var sql = `INSERT INTO list (title, description, body, img, user_id, status) VALUES (${SqlString.escape(d.title)}, ${SqlString.escape(d.description)}, ${SqlString.escape(d.body)}, '${img}', '${req.session.userId}', '0')`;
+    var sql = `INSERT INTO list (title, description, body, img, user_id, username, college, status) VALUES (${SqlString.escape(d.title)}, ${SqlString.escape(d.description)}, ${SqlString.escape(d.body)}, '${img}', '${req.session.userId}', '${usr.username}', '${usr.college}','0')`;
     DB.query(sql, function (err, result) {
       if (err) throw err;
       else{
@@ -177,25 +185,36 @@ app.post("/create",isAuth, function(req, res){
                 console.log(err)
             }
             else{    
-            res.render('myprojects',{data,uname})
+            res.redirect('/my-projects')
              }
 
         })
       }
     });
   });
-
+var a1={}
+var a2={}
 app.get("/info", function(req, res){
     DB.query(`SELECT * FROM list`, (err,data) =>{
         if(err){
             console.log(err)
         }
         else{
-        var ses = req.session.userId
-        res.render('homepage',{data,ses,uname,urole})
+              a1=data
          }
 
     })
+    DB.query(`SELECT * FROM posts`, (err,data) =>{
+        if(err){
+            console.log(err)
+        }
+        else{
+             a2=data
+         }
+
+    })
+    var ses = req.session.userId
+    res.render('homepage',{a1,a2,ses,uname,urole,usr})
 
 })
 
@@ -232,7 +251,7 @@ app.get("/delete/:id",isAuth, function(req, res){
                     console.log(err)
                 }
                 else{
-                res.render('myprojects',{data,uname})
+                res.redirect('/my-projects')
                  }
 
             })
@@ -333,7 +352,7 @@ app.post("/register", function(req, res){
 
     var user=req.body
     //var sql = `INSERT INTO user (name, username, email, password) VALUES (${SqlString.escape(user.name)}, ${SqlString.escape(user.username)}, ${SqlString.escape(user.email)}, ${SqlString.escape(user.password)})`
-    var sql = `INSERT INTO user (name, username, email, password) VALUES ('${user.name}', '${user.username}', '${user.email}', '${user.password}')`
+    var sql = `INSERT INTO user (name, username, college, email, password) VALUES ('${user.name}', '${user.username}','${user.college}', '${user.email}', '${user.password}')`
     DB.query(sql, function (err, result) {
       if (err) throw err;
       else{
@@ -361,8 +380,108 @@ app.post("/register", function(req, res){
     })
 })
 
+
+app.get("/approve-project/:id",isAuth, function(req, res){
+    var id=req.params.id
+
+        DB.query(`UPDATE list SET status = '1' WHERE id = "${id}"`, (err,result)=>{
+        if(err){
+            console.log(err)
+        }
+        else{
+
+            DB.query(`SELECT * FROM list`, (err,data) =>{
+                if(err){
+                    console.log(err)
+                }
+                else{
+                res.redirect('/dashboard')
+                 }
+
+            })
+
+        }
+    })
+
+
+}) 
+
+app.get("/approve-post/:id",isAuth, function(req, res){
+    var id=req.params.id
+
+        DB.query(`UPDATE posts SET status = '1' WHERE id = "${id}"`, (err,result)=>{
+        if(err){
+            console.log(err)
+        }
+        else{
+
+            DB.query(`SELECT * FROM list`, (err,data) =>{
+                if(err){
+                    console.log(err)
+                }
+                else{
+                res.redirect('/dashboard')
+                 }
+
+            })
+
+        }
+    })
+
+}) 
+
+var d1={}
+    var d2 ={}
 app.get('/dashboard',isAuth,isAdmin,function(req, res){
-    res.render('dashboard',{uname})
+    DB.query(`SELECT * FROM list`, (err,data) =>{
+        if(err){
+            console.log(err)
+        }
+        else{  
+            d1=data
+         }
+
+    })
+    DB.query(`SELECT * FROM posts`, (err,data) =>{
+        if(err){
+            console.log(err)
+        }
+        else{  
+             d2= data
+
+         }
+
+    })
+    res.render('dashboard',{d1,d2})
+    //res.json(d1)
+})
+
+app.get("/reject-project/:id",isAuth, function(req, res){
+    var id= req.params.id
+    DB.query(`DELETE FROM list WHERE id = "${id}"`,(err,result)=>{
+        if(err){
+          console.log(err)
+        }
+        else{
+                res.redirect('/dashboard')
+        }
+
+    })
+})
+
+app.get("/reject-post/:id",isAuth, function(req, res){
+    var id= req.params.id
+    DB.query(`DELETE FROM posts WHERE id = "${id}"`,(err,result)=>{
+        if(err){
+          console.log(err)
+        }
+        else{
+            
+                res.redirect('/dashboard')
+
+        }
+
+    })
 })
 
 app.get('/logout', function(req, res){
@@ -372,7 +491,6 @@ app.get('/logout', function(req, res){
     
     })
 })  
-
 
 
 module.exports = router
