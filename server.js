@@ -349,11 +349,27 @@ app.get("/login",isLogin, function(req, res){
 })
 
 app.get("/allProjects",function(req, res){
-    res.render('allProjects')
+    DB.query(`SELECT * FROM list`, (err,data) =>{
+        if(err){
+            console.log(err)
+        }
+        else{ 
+        res.render('allProjects',{data,usr})    
+         }
+
+    })
 })
 
 app.get("/allBlogs", function(req, res){
-    res.render('allBlogs')
+    DB.query(`SELECT * FROM posts`, (err,data) =>{
+        if(err){
+            console.log(err)
+        }
+        else{ 
+        res.render('allBlogs',{data,usr})    
+         }
+
+    })
 })
 
 app.post("/register", function(req, res){
@@ -460,7 +476,7 @@ app.get('/dashboard',isAuth,isAdmin,function(req, res){
          }
 
     })
-    res.render('dashboard',{d1,d2})
+    res.render('dashboard',{d1,d2,usr})
     //res.json(d1)
 })
 

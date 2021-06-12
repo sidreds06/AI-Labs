@@ -64,6 +64,13 @@
                       <form class="d-inline" action="/deletePost/<%= data[i].id %>" method="get">
                         <input class="btn btn-danger" type="submit" name="upvote" value="Delete" />
                     </form>
+                    <%if(data[i].status) { %>
+                      <span class="ml-5 text-success"> Approved</span>
+                 <%}%>
+                 <%if(!data[i].status) { %>
+                   <span class="ml-5 text-danger">Pending Approval</span>
+       
+               <%}%>
                             <!-- <button type="button" class="btn btn-primary">View</button>
                             <button type="button" class="btn btn-info">Edit</button>
                             <button type="button" class="btn btn-danger">Delete</button> -->

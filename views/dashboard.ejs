@@ -23,8 +23,17 @@
           <li class="nav-item">
             <a class="nav-link" href="/blog">Blogs</a>
           </li>
-          <li class="nav-pills">
-            <a class="nav-link active mx-3 px-4 rounded-pill" href="#">User</a>
+          <li class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle text-right mx-3 rounded-pill" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <%=usr.username %>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="#">Profile</a>
+              <% if(urole){%>
+              <a class="dropdown-item" href="/dashboard">Dashboard</a>
+              <%}%>
+              <a class="dropdown-item" href="/logout">Logout</a>
+            </div>
           </li>
         </ul>
     </div>

@@ -29,15 +29,18 @@
               <li class="nav-item">
                 <a class="nav-link" href="/add-projects">Add Projects</a>
               </li>
-                <li class="dropdown">
-                  <button class="btn btn-secondary dropdown-toggle text-right mx-3 rounded-pill" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <%=usr.username%>
-                  </button>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#">Profile</a>
-                    <a class="dropdown-item" href="/logout">Logout</a>
-                  </div>
-                </li>
+              <li class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle text-right mx-3 rounded-pill" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <%=usr.username %>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href="#">Profile</a>
+                  <% if(urole){%>
+                  <a class="dropdown-item" href="/dashboard">Dashboard</a>
+                  <%}%>
+                  <a class="dropdown-item" href="/logout">Logout</a>
+                </div>
+              </li>
             </ul>
           </div>
       <!-- </div> -->
@@ -72,4 +75,7 @@
         <% } %>
         <% } %>
         </div>
+        <div class="container text-center">
+          <a class="link m-5" href="/allProjects"><h3>Browse all Projects</h3></a>  
+        </div>   
       <%- include('footer'); %>
