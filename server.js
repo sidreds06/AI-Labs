@@ -19,8 +19,8 @@ var options = {
 
 var sessionStore = new MySQLStore(options);
 
-var uname = 'User'
-var urole = 0
+// var uname = 'User'
+// var urole = 0
 var usr = []
 var SqlString = require('sqlstring');
 
@@ -86,7 +86,7 @@ app.get("/projects",isAuth, function(req, res){
             console.log(err)
         }
         else{ 
-        res.render('projects',{data,uname,usr})    
+        res.render('projects',{data,usr})    
          }
 
     })
@@ -99,14 +99,14 @@ app.get("/blog",isAuth, (req, res)=>{
             console.log(err)
         }
         else{ 
-        res.render('index',{data,uname,usr})    
+        res.render('index',{data,usr})    
          }
 
     })
 })
 
 app.get("/addPost",isAuth, (req, res) => {
-    res.render('addPost',{uname});
+    res.render('addPost',{usr});
 })
 
 app.get('/myPost',isAuth, (req, res) => {
@@ -116,7 +116,7 @@ app.get('/myPost',isAuth, (req, res) => {
             console.log(err);
         }
         else{
-            res.render('myPost', {data,uname});
+            res.render('myPost', {data,usr});
         }
     })
 })
@@ -129,14 +129,14 @@ app.get("/my-projects",isAuth, function(req, res){
         else{
         console.log(name)    
         var id = req.session.userId    
-        res.render('myprojects',{data,id,uname})
+        res.render('myprojects',{data,id,usr})
          }
 
     })
 })
 
 app.get("/add-projects",isAuth, function(req, res){
-    res.render('addprojects',{uname})
+    res.render('addprojects',{usr})
 })
 
 app.post("/create-post",isAuth, (req, res) => {
@@ -157,7 +157,7 @@ app.post("/create-post",isAuth, (req, res) => {
                     console.log(err)
                 }
                 else{
-                res.render('myPost',{data,uname})
+                res.render('myPost',{data,usr})
                  }
               
             })
@@ -214,7 +214,7 @@ app.get("/info", function(req, res){
 
     })
     var ses = req.session.userId
-    res.render('homepage',{a1,a2,ses,uname,urole,usr})
+    res.render('homepage',{a1,a2,ses,usr})
 
 })
 
@@ -231,7 +231,7 @@ app.get('/deletePost/:id',isAuth, (req, res) => {
                     console.log(err)
                 }
                 else{
-                res.render('myPost',{data,uname})
+                res.render('myPost',{data,usr})
                  }
               
             })
@@ -268,7 +268,7 @@ app.get("/edit/:id",isAuth, function(req, res){
             console.log(err)
         }
         else{
-        res.render('editproject',{data,uname})
+        res.render('editproject',{data,usr})
          }
     })
 })
@@ -281,7 +281,7 @@ app.get("/editPost/:id",isAuth, function(req, res){
             console.log(err)
         }
         else{
-        res.render('editPost',{data,uname})
+        res.render('editPost',{data,usr})
          }
     })
 })
@@ -302,7 +302,7 @@ app.post("/update/:id",isAuth, function(req, res){
                     console.log(err)
                 }
                 else{
-                res.render('myprojects',{data,uname})
+                res.render('myprojects',{data,usr})
                  }
 
             })
@@ -320,7 +320,7 @@ app.get('/viewPost/:id',isAuth, (req, res) => {
             console.log(err);
         }
         else{
-            res.render('viewPost', {data,uname});
+            res.render('viewPost', {data,usr});
         }
     })
 })
@@ -333,7 +333,7 @@ app.get("/view/:id",isAuth, function(req, res){
             console.log(err)
         }
         else{
-        res.render('view',{data,uname})
+        res.render('view',{data,usr})
          }
     })
 
@@ -346,6 +346,14 @@ app.get('/register',isLogin, (req, res) => {
 
 app.get("/login",isLogin, function(req, res){
     res.render('login')
+})
+
+app.get("/allProjects",function(req, res){
+    res.render('allProjects')
+})
+
+app.get("/allBlogs", function(req, res){
+    res.render('allBlogs')
 })
 
 app.post("/register", function(req, res){
