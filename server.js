@@ -195,6 +195,7 @@ app.post("/create",isAuth, function(req, res){
 var a1={}
 var a2={}
 app.get("/info", function(req, res){
+    var ses = req.session.userId
     DB.query(`SELECT * FROM list`, (err,data) =>{
         if(err){
             console.log(err)
@@ -210,11 +211,12 @@ app.get("/info", function(req, res){
         }
         else{
              a2=data
+             res.render('homepage',{a1,a2,ses,usr})
          }
 
     })
-    var ses = req.session.userId
-    res.render('homepage',{a1,a2,ses,usr})
+   
+    
 
 })
 
@@ -348,7 +350,7 @@ app.get("/login",isLogin, function(req, res){
     res.render('login')
 })
 
-app.get("/allProjects",function(req, res){
+app.get("/allProjects",isAuth,function(req, res){
     DB.query(`SELECT * FROM list`, (err,data) =>{
         if(err){
             console.log(err)
@@ -360,7 +362,7 @@ app.get("/allProjects",function(req, res){
     })
 })
 
-app.get("/allBlogs", function(req, res){
+app.get("/allBlogs",isAuth, function(req, res){
     DB.query(`SELECT * FROM posts`, (err,data) =>{
         if(err){
             console.log(err)
@@ -456,7 +458,8 @@ app.get("/approve-post/:id",isAuth, function(req, res){
 
 var d1={}
     var d2 ={}
-app.get('/dashboard',isAuth,isAdmin,function(req, res){
+app.get('/dashboard',isAuth,isAdmin, function(req, res){
+    
     DB.query(`SELECT * FROM list`, (err,data) =>{
         if(err){
             console.log(err)
@@ -472,11 +475,11 @@ app.get('/dashboard',isAuth,isAdmin,function(req, res){
         }
         else{  
              d2= data
-
+             res.render('dashboard',{d1,d2,usr})
          }
 
     })
-    res.render('dashboard',{d1,d2,usr})
+    
     //res.json(d1)
 })
 
