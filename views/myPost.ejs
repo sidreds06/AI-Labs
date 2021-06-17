@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <!-- ========== Favicon Icon ========== -->
+     <link rel="shortcut icon" href="/IMG/bb.png" type="image/x-icon">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <link rel="stylesheet" href="../blogs/css/myPost.css">
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300&display=swap" rel="stylesheet">
@@ -11,32 +16,7 @@
     <script src=""></script>
 </head>
 <body>
-    <!-- navbar -->
-    <nav class="navbar navbar-toggleable-md bg-inverse navbar-inverse justify-content-center">
-      <div class="container">
-          <button class="navbar-toggler" data-toggle="collapse" data-target="#mainNav">
-              <span class="navbar-toggler-icon"></span>
-          </button>
-          <a href="https://www.theblackbucks.com/" class="navbar-brand">Blackbuck</a>
-          <div class="collapse navbar-collapse " id="mainNav">
-              <div class="navbar-nav ml-auto">
-                <a class="nav-item nav-link " href="/info">Home</a>
-                <a class="nav-item nav-link" href="/projects">Projects</a>
-                  <a class="nav-item nav-link" href="/addPost">Add-Posts</a>
-                  <a class="nav-item nav-link" href="/myPost">My-Posts</a>
-                  <div class="dropdown align-items-right">
-                    <button class="btn btn-primary dropdown-toggle text-right mx-3 rounded-pill" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <%=usr.username%>
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                      <a class="dropdown-item" href="#">Profile</a>
-                      <a class="dropdown-item" href="/logout">Logout</a>
-                    </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </nav>
+  <%- include('navbar'); -%>
 
 
     <div class="container mt-5 mb-5">
@@ -50,9 +30,11 @@
             </tr>
             </thead>
             <tbody>
-                <%for(var i=0; i<data.length; ++i) { %>
+                <%for(var i=0,j=0; i<data.length; ++i) { %>
+                  <%if(id === data[i].user_id) { %>
+                    <%j++%>
                     <tr>
-                        <td><%=i+1%></td>
+                        <td><%=j%></td>
                         <td><%=data[i].title%></td>
                         <td>
                           <form class="d-inline" action="/viewPost/<%= data[i].id %>" method="get">
@@ -67,9 +49,13 @@
                     <%if(data[i].status) { %>
                       <span class="ml-5 text-success"> Approved</span>
                  <%}%>
-                 <%if(!data[i].status) { %>
-                   <span class="ml-5 text-danger">Pending Approval</span>
-       
+                 <%if(!data[i].status && !data[i].publish) { %>
+                  <span class="ml-5 text-primary">Saved</span>
+                  <%}%>
+                <%if(!data[i].status && data[i].publish) { %>
+                  <span class="ml-5 text-danger">Pending Approval</span>
+      
+              <%}%>
                <%}%>
                             <!-- <button type="button" class="btn btn-primary">View</button>
                             <button type="button" class="btn btn-info">Edit</button>

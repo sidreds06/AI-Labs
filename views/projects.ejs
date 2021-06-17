@@ -4,48 +4,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <!-- ========== Favicon Icon ========== -->
+     <link rel="shortcut icon" href="/IMG/bb.png" type="image/x-icon">
+
     <title>Projects</title>
     <link rel="stylesheet" href="/Frontend/CSS/projects.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-        <!-- Brand/logo -->
-        <div class="container">
-        <!-- <a class="navbar-brand " href="#"><strong>Blackbuck</strong></a> -->
-        <button class="navbar-toggler" data-toggle="collapse" data-target="#mainNav">
-          <span class="navbar-toggler-icon"></span>
-      </button>
-      <a href="https://www.theblackbucks.com/" class="navbar-brand">Blackbuck</a>
-      <!-- <div class="collapse navbar-collapse " id="mainNav"> -->
-          <div class="navbar-nav" >
-            <ul class="navbar-nav navbar-collapse collapse" id="mainNav">
-              <li class="nav-item">
-                <a class="nav-link" href="/info">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/my-projects">My Projects</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/add-projects">Add Projects</a>
-              </li>
-              <li class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle text-right mx-3 rounded-pill" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <%=usr.username %>
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item" href="#">Profile</a>
-                  <% if(urole){%>
-                  <a class="dropdown-item" href="/dashboard">Dashboard</a>
-                  <%}%>
-                  <a class="dropdown-item" href="/logout">Logout</a>
-                </div>
-              </li>
-            </ul>
-          </div>
-      <!-- </div> -->
-    </div>
-      </nav>
+  <%- include('navbar'); -%>
       <div class="card-fluid rounded-0 mx-auto bg-dark" style="width:100%">
           <img class="card-img" src="../../IMG/one.jpg" alt="AI" width="100%" >
           <div class="card-img-overlay">

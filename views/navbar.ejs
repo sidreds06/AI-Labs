@@ -1,0 +1,57 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+
+        <a class="navbar-brand" href="/info">
+            <img src="/IMG/bb.png" width="35" height="35" class="d-inline-block align-top" alt="">
+            Blackbuck
+          </a>
+
+    <!-- <a class="navbar-brand" href="#"> Blackbuck </a> -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav ml-auto">
+        <a class="nav-item nav-link" href="/info">Home <span class="sr-only">(current)</span></a>
+
+        <% if(ses){%>
+            <% if(usr.admin){%>
+        <a class="nav-item nav-link" href="/dashboard">Dashboard</a>
+            <%}%>
+        <li class="dropdown">
+            <a class="nav-item nav-link dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Blogs</a>
+            <div class="dropdown-menu bg-dark border-0" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item text-light bg-dark" href="/blog">Blogs</a>
+              <a class="dropdown-item text-light bg-dark" href="/myPost">My Posts</a>
+              <a class="dropdown-item text-light bg-dark" href="/addPost">Add Post</a>
+            </div>
+          </li>
+
+          <li class="dropdown">
+            <a class="nav-item nav-link dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Projects</a>
+            <div class="dropdown-menu bg-dark border-0" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item text-light bg-dark" href="/projects">Projects</a>
+              <a class="dropdown-item text-light bg-dark" href="/my-projects">My Projects</a>
+              <a class="dropdown-item text-light bg-dark" href="/add-projects">Add Project</a>
+            </div>
+          </li>
+
+          
+          <li class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle text-right mx-3 rounded-pill" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <%=usr.username %>
+              </button>
+            <div class="dropdown-menu bg-dark border-0" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item text-light bg-dark" href="#">Profile</a>
+              <a class="dropdown-item text-light bg-dark" href="/logout">Logout</a>
+            </div>
+          </li>
+     <%}%>
+     <% if(!ses){%>
+        <a class="nav-item nav-link" href="/login">Login</a>
+        <a class="nav-item nav-link" href="/register">Register</a>
+     <%}%>  
+      </div>
+    </div>
+  </div>
+  </nav>

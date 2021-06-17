@@ -4,38 +4,18 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <!-- ========== Favicon Icon ========== -->
+     <link rel="shortcut icon" href="/IMG/bb.png" type="image/x-icon">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <link rel="stylesheet" href="../blogs/css/addPost.css">
     <title>Blackbucks Add-Post</title>
     <script src=""></script>
 </head>
 <body>
-    <!-- navbar -->
-    <nav class="navbar navbar-toggleable-md bg-inverse navbar-inverse justify-content-center">
-        <div class="container">
-            <button class="navbar-toggler" data-toggle="collapse" data-target="#mainNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <a href="https://www.theblackbucks.com/" class="navbar-brand">Blackbuck</a>
-            <div class="collapse navbar-collapse " id="mainNav">
-                <div class="navbar-nav ml-auto">
-                    <a class="nav-item nav-link " href="/info">Home</a>
-                    <a class="nav-item nav-link" href="/projects">Projects</a>
-                    <a class="nav-item nav-link" href="/addPost">Add-Posts</a>
-                    <a class="nav-item nav-link" href="/myPost">My-Posts</a>
-                    <div class="dropdown align-items-right">
-                      <button class="btn btn-primary dropdown-toggle text-right mx-3 rounded-pill" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <%=usr.username%>
-                      </button>
-                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#">Profile</a>
-                        <a class="dropdown-item" href="/logout">Logout</a>
-                      </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
+  <%- include('navbar'); -%>
 
     <div class="jumbotron jumbotron-fluid bg-info text-white text-center">
         <div class="container">
@@ -63,7 +43,8 @@
                 <input type="file" name="image" class="text-input">
             </div>
             <center>
-                <button type="submit" class="btn btn-primary my-5">Add Post</button>
+              <button type="submit" name="one" value=1 class="btn btn-primary my-5 mx-2">Save Post</button>  
+              <button type="submit" name="two" value=2 class="btn btn-primary my-5 mx-2">Publish Post</button>
             </center>
         </form>
     </div>
@@ -215,12 +196,7 @@
     </script> -->
     <script src="../views/ckeditor/ckeditor.js"></script>
     <script>
-      CKEDITOR.replace('body', {
-          extraPlugins : 'filebrowser',
-          filebrowserBrowseUrl:'browser.php?type=Images',
-          filebrowserUploadMethod:"form",
-          filebrowserUploadUrl:'upload.php'
-      });
+      CKEDITOR.replace('body');
   </script>
 </body>
 </html>

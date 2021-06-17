@@ -6,6 +6,7 @@ const { render, name } = require('ejs');
 const session = require('express-session')
 var bodyParser = require('body-parser')
 var MySQLStore = require('express-mysql-session')(session);
+const bcrypt = require('bcrypt')
 
 
 const app = express();
@@ -21,6 +22,7 @@ var sessionStore = new MySQLStore(options);
 
 // var uname = 'User'
 // var urole = 0
+var ses =0
 var usr = []
 var SqlString = require('sqlstring');
 
@@ -47,6 +49,7 @@ app.use(session({
      },
      store: sessionStore
 }))
+
 
 var isAuth=(req,res,next)=>{
    if(req.session.userId)
@@ -86,7 +89,7 @@ app.get("/projects",isAuth, function(req, res){
             console.log(err)
         }
         else{ 
-        res.render('projects',{data,usr})    
+        res.render('projects',{data,usr,ses})    
          }
 
     })
@@ -99,14 +102,14 @@ app.get("/blog",isAuth, (req, res)=>{
             console.log(err)
         }
         else{ 
-        res.render('index',{data,usr})    
+        res.render('index',{data,usr,ses})    
          }
 
     })
 })
 
 app.get("/addPost",isAuth, (req, res) => {
-    res.render('addPost',{usr});
+    res.render('addPost',{usr,ses});
 })
 
 app.get('/myPost',isAuth, (req, res) => {
@@ -116,7 +119,8 @@ app.get('/myPost',isAuth, (req, res) => {
             console.log(err);
         }
         else{
-            res.render('myPost', {data,usr});
+            var id = req.session.userId 
+            res.render('myPost', {data,usr,id,ses});
         }
     })
 })
@@ -129,17 +133,21 @@ app.get("/my-projects",isAuth, function(req, res){
         else{
         console.log(name)    
         var id = req.session.userId    
-        res.render('myprojects',{data,id,usr})
+        res.render('myprojects',{data,id,usr,ses})
          }
 
     })
 })
 
 app.get("/add-projects",isAuth, function(req, res){
-    res.render('addprojects',{usr})
+    res.render('addprojects',{usr,ses})
 })
 
 app.post("/create-post",isAuth, (req, res) => {
+    var i = 0
+    if(req.body.two){
+        i=1
+    }
     if(req.files){
         var file = req.files.image;
         var filename = file.name;
@@ -148,25 +156,30 @@ app.post("/create-post",isAuth, (req, res) => {
     }
     var d = req.body;
     var img = '/IMG/Uploaded_img/'+filename;
-    var query = `INSERT INTO posts (title, description, body, image, user_id, username, college, status) VALUES (${SqlString.escape(d.title)}, ${SqlString.escape(d.description)}, ${SqlString.escape(d.body)}, '${img}', '${req.session.userId}', '${usr.username}', '${usr.college}', '0')`;
+    var query = `INSERT INTO posts (title, description, body, image, user_id, username, college, status, publish) VALUES (${SqlString.escape(d.title)}, ${SqlString.escape(d.description)}, ${SqlString.escape(d.body)}, '${img}', '${req.session.userId}', '${usr.username}', '${usr.college}', '0', '${i}')`;
     DB.query(query, (err, result) => {
         if(err) throw err;
         else{
-            DB.query(`SELECT * FROM posts`, (err,data) =>{
-                if(err){
-                    console.log(err)
-                }
-                else{
-                res.render('myPost',{data,usr})
+    //         DB.query(`SELECT * FROM posts`, (err,data) =>{
+    //             if(err){
+    //                 console.log(err)
+    //             }
+    //             else{
+              //  res.render('myPost',{data,usr})
+              res.redirect('/mypost')
                  }
               
             })
-        }
-    })
+    //     }
+    // })
 })
 
 app.post("/create",isAuth, function(req, res){
 
+    var i = 0
+    if(req.body.two){
+        i=1
+    }
     if(req.files){
         var file =req.files.image
         var filename = file.name
@@ -176,26 +189,26 @@ app.post("/create",isAuth, function(req, res){
     var d=req.body
     var img = '/IMG/Uploaded_img/'+filename
     console.log(d)
-    var sql = `INSERT INTO list (title, description, body, img, user_id, username, college, status) VALUES (${SqlString.escape(d.title)}, ${SqlString.escape(d.description)}, ${SqlString.escape(d.body)}, '${img}', '${req.session.userId}', '${usr.username}', '${usr.college}','0')`;
+    var sql = `INSERT INTO list (title, description, body, img, user_id, username, college, status, publish) VALUES (${SqlString.escape(d.title)}, ${SqlString.escape(d.description)}, ${SqlString.escape(d.body)}, '${img}', '${req.session.userId}', '${usr.username}', '${usr.college}','0','${i}')`;
     DB.query(sql, function (err, result) {
       if (err) throw err;
       else{
-        DB.query(`SELECT * FROM list`, (err,data) =>{
-            if(err){
-                console.log(err)
-            }
-            else{    
+    //     DB.query(`SELECT * FROM list`, (err,data) =>{
+    //         if(err){
+    //             console.log(err)
+    //         }
+    //         else{    
             res.redirect('/my-projects')
-             }
+              }
 
-        })
-      }
-    });
+         })
+    //   }
+    // });
   });
 var a1={}
 var a2={}
 app.get("/info", function(req, res){
-    var ses = req.session.userId
+    // ses = req.session.userId
     DB.query(`SELECT * FROM list`, (err,data) =>{
         if(err){
             console.log(err)
@@ -228,15 +241,16 @@ app.get('/deletePost/:id',isAuth, (req, res) => {
             console.log(err);
         }
         else{
-            DB.query(`SELECT * FROM posts`, (err,data) =>{
-                if(err){
-                    console.log(err)
-                }
-                else{
-                res.render('myPost',{data,usr})
-                 }
+            // DB.query(`SELECT * FROM posts`, (err,data) =>{
+            //     if(err){
+            //         console.log(err)
+            //     }
+            //     else{
+                // res.render('myPost',{data,usr})
+                res.redirect('/mypost')
+                //  }
               
-            })
+            // })
         }
     })
 })
@@ -247,17 +261,17 @@ app.get("/delete/:id",isAuth, function(req, res){
         if(err){
           console.log(err)
         }
-        else{
-            DB.query(`SELECT * FROM list`, (err,data) =>{
-                if(err){
-                    console.log(err)
-                }
-                else{
-                res.redirect('/my-projects')
-                 }
+        // else{
+        //     DB.query(`SELECT * FROM list`, (err,data) =>{
+        //         if(err){
+        //             console.log(err)
+        //         }
+        //         else{
+                 res.redirect('/my-projects')
+        //          }
 
-            })
-        }
+        //     })
+        // }
 
     })
 })
@@ -270,7 +284,7 @@ app.get("/edit/:id",isAuth, function(req, res){
             console.log(err)
         }
         else{
-        res.render('editproject',{data,usr})
+        res.render('editproject',{data,usr,ses})
          }
     })
 })
@@ -283,7 +297,7 @@ app.get("/editPost/:id",isAuth, function(req, res){
             console.log(err)
         }
         else{
-        res.render('editPost',{data,usr})
+        res.render('editPost',{data,usr,ses})
          }
     })
 })
@@ -291,23 +305,58 @@ app.get("/editPost/:id",isAuth, function(req, res){
 app.post("/update/:id",isAuth, function(req, res){
     var id=req.params.id
     var d = req.body
-
+    var i = 0
+    if(req.body.two){
+        i=1
+    }
     //DB.query(`UPDATE list SET title =${data.title}, description = ${data.description}, body = ${data.body} WHERE id = "${id}"`, (err,result)=>{
-        DB.query(`UPDATE list SET title = ${SqlString.escape(d.title)}, description = ${SqlString.escape(d.description)}, body = ${SqlString.escape(d.body)} WHERE id = "${id}"`, (err,result)=>{
+        DB.query(`UPDATE list SET title = ${SqlString.escape(d.title)}, description = ${SqlString.escape(d.description)}, body = ${SqlString.escape(d.body)}, publish = ${i} WHERE id = "${id}"`, (err,result)=>{
         if(err){
             console.log(err)
         }
         else{
 
-            DB.query(`SELECT * FROM list`, (err,data) =>{
-                if(err){
-                    console.log(err)
-                }
-                else{
-                res.render('myprojects',{data,usr})
-                 }
+            // DB.query(`SELECT * FROM list`, (err,data) =>{
+            //     if(err){
+            //         console.log(err)
+            //     }
+            //     else{
+            //     res.render('myprojects',{data,usr})
+            //      }
 
-            })
+            // })
+            res.redirect('/my-projects')
+
+        }
+    })
+
+
+}) 
+
+app.post("/update-post/:id",isAuth, function(req, res){
+    var id=req.params.id
+    var d = req.body
+    var i = 0
+    if(req.body.two){
+        i=1
+    }
+    //DB.query(`UPDATE list SET title =${data.title}, description = ${data.description}, body = ${data.body} WHERE id = "${id}"`, (err,result)=>{
+        DB.query(`UPDATE posts SET title = ${SqlString.escape(d.title)}, description = ${SqlString.escape(d.description)}, body = ${SqlString.escape(d.body)}, publish = ${i} WHERE id = "${id}"`, (err,result)=>{
+        if(err){
+            console.log(err)
+        }
+        else{
+
+            // DB.query(`SELECT * FROM list`, (err,data) =>{
+            //     if(err){
+            //         console.log(err)
+            //     }
+            //     else{
+            //     res.render('myprojects',{data,usr})
+            //      }
+
+            // })
+            res.redirect('/myPost')
 
         }
     })
@@ -322,7 +371,7 @@ app.get('/viewPost/:id',isAuth, (req, res) => {
             console.log(err);
         }
         else{
-            res.render('viewPost', {data,usr});
+            res.render('viewPost', {data,usr,ses});
         }
     })
 })
@@ -335,7 +384,7 @@ app.get("/view/:id",isAuth, function(req, res){
             console.log(err)
         }
         else{
-        res.render('view',{data,usr})
+        res.render('view',{data,usr,ses})
          }
     })
 
@@ -356,7 +405,7 @@ app.get("/allProjects",isAuth,function(req, res){
             console.log(err)
         }
         else{ 
-        res.render('allProjects',{data,usr})    
+        res.render('allProjects',{data,usr,ses})    
          }
 
     })
@@ -368,17 +417,16 @@ app.get("/allBlogs",isAuth, function(req, res){
             console.log(err)
         }
         else{ 
-        res.render('allBlogs',{data,usr})    
+        res.render('allBlogs',{data,usr,ses})    
          }
 
     })
 })
-
-app.post("/register", function(req, res){
-
+app.post("/register",async function(req, res){
+try{
     var user=req.body
-    //var sql = `INSERT INTO user (name, username, email, password) VALUES (${SqlString.escape(user.name)}, ${SqlString.escape(user.username)}, ${SqlString.escape(user.email)}, ${SqlString.escape(user.password)})`
-    var sql = `INSERT INTO user (name, username, college, email, password) VALUES ('${user.name}', '${user.username}','${user.college}', '${user.email}', '${user.password}')`
+    var pas = await  bcrypt.hash(user.password, 10)
+    var sql = `INSERT INTO user (name, username, college, email, password) VALUES ('${user.name}', '${user.username}','${user.college}', '${user.email}', ${SqlString.escape(pas)})`
     DB.query(sql, function (err, result) {
       if (err) throw err;
       else{
@@ -386,13 +434,19 @@ app.post("/register", function(req, res){
          }
 
         })    
+    }
+    catch{
+        console.log("error")
+    }
   })
 
-  app.post("/login", function(req, res){
+  app.post("/login",function(req, res){
+      try{
       const user = req.body
-    DB.query(`SELECT * FROM user WHERE email = "${user.email}" AND password = "${user.password}"`, (err,data) =>{
-             if(data.length > 0){
+    DB.query(`SELECT * FROM user WHERE email = "${user.email}"`,async (err,data) =>{
+            if(await bcrypt.compare(user.password,data[0].password)){
             req.session.userId = data[0].id   
+            ses =  req.session.userId
             req.session.username = data[0].username
             uname = data[0].username
             urole = data[0].admin
@@ -404,6 +458,10 @@ app.post("/register", function(req, res){
             res.redirect('login')
          }
     })
+}
+catch{
+    console.log("error")
+}
 })
 
 
@@ -475,7 +533,7 @@ app.get('/dashboard',isAuth,isAdmin, function(req, res){
         }
         else{  
              d2= data
-             res.render('dashboard',{d1,d2,usr})
+             res.render('dashboard',{d1,d2,usr,ses})
          }
 
     })
@@ -512,12 +570,20 @@ app.get("/reject-post/:id",isAuth, function(req, res){
 })
 
 app.get('/logout', function(req, res){
+    ses = 0
     req.session.destroy((err)=>{
         if(err) throw err;
         res.redirect('info')
     
     })
 })  
+
+
+app.post("/img", function(req, res){
+    console.log("called")
+    console.log(req.body)
+   
+})
 
 
 module.exports = router
