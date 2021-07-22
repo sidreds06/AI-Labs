@@ -66,11 +66,15 @@ var isAdmin=(req,res,next)=>{
  }
 
  var isLogin=(req,res,next)=>{
-    if(!req.session.role)
+    if(!req.session.userId)
       next()
     else
       res.redirect('info')  
  }
+
+ app.get("/", (req, res) => {
+    res.redirect('/info')
+})
 
 app.use('/', router)
 
@@ -208,7 +212,7 @@ app.post("/create",isAuth, function(req, res){
 var a1={}
 var a2={}
 app.get("/info", function(req, res){
-    // ses = req.session.userId
+     ses = req.session.userId
     DB.query(`SELECT * FROM list`, (err,data) =>{
         if(err){
             console.log(err)
